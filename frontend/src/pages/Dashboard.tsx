@@ -54,7 +54,7 @@ export default function Dashboard() {
     }
   };
 
-  if (loading) {
+  if (loading && !stats) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
@@ -63,18 +63,17 @@ export default function Dashboard() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="card flex flex-col items-center py-12 text-center gap-3">
-        <AlertTriangle className="w-12 h-12 text-amber-500" />
-        <h2 className="text-lg font-semibold text-gray-900">Backend Unavailable</h2>
-        <p className="text-sm text-gray-500 max-w-sm">{error}</p>
-        <button onClick={() => window.location.reload()} className="btn-secondary mt-2">Retry</button>
-      </div>
-    );
-  }
-
-  if (!stats) return null;
+  // Graceful fallback if stats is null
+  const currentStats = stats || {
+    total_scans: 0,
+    safe_count: 0,
+    suspicious_count: 0,
+    critical_count: 0,
+    threat_distribution: [{ name: 'URL', value: 0 }, { name: 'FILE', value: 0 }, { name: 'IMAGE', value: 0 }, { name: 'TEXT', value: 0 }],
+    recent_scans: [],
+    risk_level_distribution: [{ level: 'SAFE-LOOKING', count: 0 }, { level: 'LOW RISK', count: 0 }, { level: 'MODERATE RISK', count: 0 }, { level: 'HIGH RISK', count: 0 }, { level: 'CRITICAL RISK', count: 0 }],
+    most_common_threats: []
+  };
 
   return (
     <div className="space-y-6">
@@ -93,10 +92,10 @@ export default function Dashboard() {
       {/* Stats cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Scans', value: stats.total_scans, icon: Shield, color: 'blue', bg: 'bg-blue-50', border: 'border-blue-100' },
-          { label: 'Safe', value: stats.safe_count, icon: CheckCircle, color: 'green', bg: 'bg-green-50', border: 'border-green-100' },
-          { label: 'Suspicious', value: stats.suspicious_count, icon: AlertTriangle, color: 'amber', bg: 'bg-amber-50', border: 'border-amber-100' },
-          { label: 'Critical', value: stats.critical_count, icon: TrendingUp, color: 'red', bg: 'bg-red-50', border: 'border-red-100' },
+          { label: 'Total Scans', value: currentStats.total_scans, icon: Shield, color: 'blue', bg: 'bg-blue-50', border: 'border-blue-100' },
+          { label: 'Safe', value: currentStats.safe_count, icon: CheckCircle, color: 'green', bg: 'bg-green-50', border: 'border-green-100' },
+          { label: 'Suspicious', value: currentStats.suspicious_count, icon: AlertTriangle, color: 'amber', bg: 'bg-amber-50', border: 'border-amber-100' },
+          { label: 'Critical', value: currentStats.critical_count, icon: TrendingUp, color: 'red', bg: 'bg-red-50', border: 'border-red-100' },
         ].map(card => (
           <div key={card.label} className={clsx('card border', card.border, card.bg)}>
             <div className="flex items-start justify-between">
@@ -139,11 +138,11 @@ export default function Dashboard() {
         {/* Threat distribution pie */}
         <div className="card">
           <h2 className="font-semibold text-gray-900 mb-4">Threat Distribution</h2>
-          {stats.threat_distribution && stats.threat_distribution.length > 0 ? (
+          {currentStats.threat_distribution && currentStats.threat_distribution.length > 0 ? (
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
                 <Pie
-                  data={stats.threat_distribution}
+                  data={currentStats.threat_distribution}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
@@ -152,7 +151,7 @@ export default function Dashboard() {
                   dataKey="value"
                   nameKey="name"
                 >
-                  {stats.threat_distribution.map((_, i) => (
+                  {currentStats.threat_distribution.map((_, i) => (
                     <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                   ))}
                 </Pie>
@@ -168,14 +167,14 @@ export default function Dashboard() {
         {/* Risk level bar chart */}
         <div className="card">
           <h2 className="font-semibold text-gray-900 mb-4">Risk Level Distribution</h2>
-          {stats.risk_level_distribution && stats.risk_level_distribution.length > 0 ? (
+          {currentStats.risk_level_distribution && currentStats.risk_level_distribution.length > 0 ? (
             <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={stats.risk_level_distribution} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+              <BarChart data={currentStats.risk_level_distribution} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                 <XAxis dataKey="level" tick={{ fontSize: 10 }} />
                 <YAxis tick={{ fontSize: 10 }} />
                 <Tooltip />
                 <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                  {stats.risk_level_distribution.map((entry, i) => (
+                  {currentStats.risk_level_distribution.map((entry, i) => (
                     <Cell key={i} fill={BAR_COLORS[entry.level] || '#6b7280'} />
                   ))}
                 </Bar>
@@ -197,7 +196,7 @@ export default function Dashboard() {
               View all <ExternalLink className="w-3 h-3" />
             </button>
           </div>
-          {stats.recent_scans.length === 0 ? (
+          {currentStats.recent_scans.length === 0 ? (
             <div className="text-center py-8 text-gray-400 text-sm">No scans yet. Run your first scan!</div>
           ) : (
             <div className="overflow-x-auto">
@@ -211,7 +210,7 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                  {stats.recent_scans.map(scan => (
+                  {currentStats.recent_scans.map(scan => (
                     <tr
                       key={scan.scan_id}
                       className="hover:bg-gray-50 cursor-pointer"
@@ -240,11 +239,11 @@ export default function Dashboard() {
         {/* Most common threats */}
         <div className="card">
           <h2 className="font-semibold text-gray-900 mb-4">Top Threat Categories</h2>
-          {stats.most_common_threats.length === 0 ? (
+          {currentStats.most_common_threats.length === 0 ? (
             <div className="text-center py-8 text-gray-400 text-sm">No threat data yet</div>
           ) : (
             <div className="space-y-3">
-              {stats.most_common_threats.slice(0, 8).map((t, i) => (
+              {currentStats.most_common_threats.slice(0, 8).map((t, i) => (
                 <div key={t.category} className="flex items-center gap-3">
                   <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center flex-shrink-0">
                     {i + 1}
@@ -254,7 +253,7 @@ export default function Dashboard() {
                     <div className="mt-1 h-1.5 rounded-full bg-gray-100 overflow-hidden">
                       <div
                         className="h-full rounded-full bg-blue-500"
-                        style={{ width: `${Math.min(100, (t.count / (stats.most_common_threats[0]?.count || 1)) * 100)}%` }}
+                        style={{ width: `${Math.min(100, (t.count / (currentStats.most_common_threats[0]?.count || 1)) * 100)}%` }}
                       />
                     </div>
                   </div>
