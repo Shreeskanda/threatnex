@@ -1,0 +1,2 @@
+# THREATNEX Backend — Procfile for Render / Heroku-compatible hosts
+web: uvicorn app.main:app --host 0.0.0.0 --port $PORT

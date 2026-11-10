@@ -1,0 +1,30 @@
+# Render.com deployment config for THREATNEX Backend
+# https://render.com/docs/yaml-spec
+
+services:
+  - type: web
+    name: threatnex-backend
+    runtime: python
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:///./threatnex.db
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "false"
+      - key: MAX_FILE_SIZE_MB
+        value: "10"
+      - key: GOOGLE_SAFE_BROWSING_API_KEY
+        sync: false
+      - key: VIRUSTOTAL_API_KEY
+        sync: false
+      - key: URLHAUS_API_KEY
+        sync: false
+      - key: PHISHTANK_API_KEY
+        sync: false
+    healthCheckPath: /api/health

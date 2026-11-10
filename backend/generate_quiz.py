@@ -1,0 +1,859 @@
+import json
+import os
+
+questions = [
+    # BEGINNER (20 Questions)
+    {
+        "id": "beg-01",
+        "level": "beginner",
+        "question": "What should you do if someone claiming to be a police officer places you under 'Digital Arrest' over a WhatsApp or Skype video call?",
+        "options": [
+            "Immediately transfer money to prove your funds are legitimate",
+            "Keep your camera on and stay on the call for 24 hours",
+            "Disconnect immediately and report the call to the 1930 cyber helpline",
+            "Send them your Aadhaar and PAN card copies to prove innocence"
+        ],
+        "correct_answer": 2,
+        "explanation": "There is no legal provision for 'Digital Arrest' in India. Law enforcement never arrests or interrogates individuals over WhatsApp or Skype calls, nor do they ask for funds. Disconnect and call 1930 immediately.",
+        "category": "Digital Arrest"
+    },
+    {
+        "id": "beg-02",
+        "level": "beginner",
+        "question": "When receiving money via UPI (Google Pay, PhonePe, Paytm), when do you need to enter your UPI PIN?",
+        "options": [
+            "Every time you receive more than ₹500",
+            "Only when the sender asks you to enter it",
+            "Never — entering a UPI PIN is strictly for DEBITING (sending) money",
+            "Always, to verify your bank account"
+        ],
+        "correct_answer": 2,
+        "explanation": "You NEVER need to enter your UPI PIN to receive money. Entering your PIN will instantly deduct money from your account.",
+        "category": "UPI Fraud"
+    },
+    {
+        "id": "beg-03",
+        "level": "beginner",
+        "question": "An SMS arrives saying your electricity will be disconnected tonight unless you call an unknown mobile number. What is this?",
+        "options": [
+            "Official power department alert",
+            "A common smishing (SMS phishing) scam designed to steal money or install malware",
+            "Routine server update notice",
+            "A warning from your housing society"
+        ],
+        "correct_answer": 1,
+        "explanation": "Electricity boards never send disconnection warnings from personal 10-digit mobile numbers with random phone numbers or shortened links.",
+        "category": "Smishing"
+    },
+    {
+        "id": "beg-04",
+        "level": "beginner",
+        "question": "Which of the following is the official Indian National Cyber Crime Reporting Portal?",
+        "options": [
+            "https://police-online.org",
+            "https://cybercrime.gov.in",
+            "https://cyber-portal-india.com",
+            "https://reportcybercrime.net"
+        ],
+        "correct_answer": 1,
+        "explanation": "https://cybercrime.gov.in is the only official government portal for reporting cybercrime in India.",
+        "category": "Awareness"
+    },
+    {
+        "id": "beg-05",
+        "level": "beginner",
+        "question": "What is the toll-free emergency helpline number for reporting financial cyber fraud in India?",
+        "options": [
+            "100",
+            "108",
+            "1930",
+            "1800"
+        ],
+        "correct_answer": 2,
+        "explanation": "1930 is the national cyber fraud helpline operated by the Ministry of Home Affairs (I4C).",
+        "category": "Emergency Response"
+    },
+    {
+        "id": "beg-06",
+        "level": "beginner",
+        "question": "A bank representative calls you asking for the OTP sent to your phone to cancel a suspicious charge. What should you do?",
+        "options": [
+            "Read out the OTP quickly so the charge is blocked",
+            "Refuse and disconnect — banks never ask for your OTP over the phone",
+            "Send the OTP via SMS instead of speaking it",
+            "Ask them to call back in 10 minutes"
+        ],
+        "correct_answer": 1,
+        "explanation": "Legitimate banks and financial institutions repeatedly emphasize that staff will NEVER ask for OTPs, CVVs, or PINs.",
+        "category": "Vishing"
+    },
+    {
+        "id": "beg-07",
+        "level": "beginner",
+        "question": "What does the 's' in 'https://' indicate?",
+        "options": [
+            "The website is operated by the state government",
+            "The connection between your browser and the website is encrypted using SSL/TLS",
+            "The website is certified malware-free by Google",
+            "The website has high-speed streaming capability"
+        ],
+        "correct_answer": 1,
+        "explanation": "HTTPS provides encrypted communication (TLS/SSL), protecting data in transit from eavesdropping.",
+        "category": "Web Security"
+    },
+    {
+        "id": "beg-08",
+        "level": "beginner",
+        "question": "You receive a WhatsApp message congratulating you for winning a ₹25,00,000 KBC lucky draw. What is the catch?",
+        "options": [
+            "You won, but must visit Mumbai to collect the cheque",
+            "It is a scam where they will demand upfront 'processing' or 'tax' fees before disappearing",
+            "It is an official promotional campaign from television broadcasters",
+            "You only won ₹10,000 instead of 25 lakhs"
+        ],
+        "correct_answer": 1,
+        "explanation": "You cannot win a contest you never entered. Legitimate prizes never require winners to pay upfront fees.",
+        "category": "Lottery Scams"
+    },
+    {
+        "id": "beg-09",
+        "level": "beginner",
+        "question": "Which top-level domain extension is exclusively reserved for authentic Indian government websites?",
+        "options": [
+            ".gov.in or .nic.in",
+            ".government.org",
+            ".gov-india.com",
+            ".india-gov.net"
+        ],
+        "correct_answer": 0,
+        "explanation": "Authentic central and state government portals strictly end with .gov.in or .nic.in.",
+        "category": "Fake Websites"
+    },
+    {
+        "id": "beg-10",
+        "level": "beginner",
+        "question": "A caller offering customer support asks you to install 'AnyDesk' or 'TeamViewer'. What does this software do?",
+        "options": [
+            "It speeds up your internet connection",
+            "It grants the caller full remote view and control of your computer or phone screen",
+            "It scans your phone for viruses for free",
+            "It creates an encrypted virtual credit card"
+        ],
+        "correct_answer": 1,
+        "explanation": "Remote access tools grant complete screen view and control, allowing scammers to view your credentials and empty your accounts.",
+        "category": "Remote Access"
+    },
+    {
+        "id": "beg-11",
+        "level": "beginner",
+        "question": "What is Two-Factor Authentication (2FA)?",
+        "options": [
+            "Using two different web browsers at once",
+            "An extra layer of security requiring two distinct forms of identification to access an account",
+            "Typing your password twice correctly",
+            "Having two separate email accounts"
+        ],
+        "correct_answer": 1,
+        "explanation": "2FA combines something you know (password) with something you have (authenticator app or token), greatly enhancing account security.",
+        "category": "Account Security"
+    },
+    {
+        "id": "beg-12",
+        "level": "beginner",
+        "question": "An online ad shows an iPhone 15 Pro for ₹12,000 (usually ₹1,30,000) on an unknown website that only accepts UPI prepayment. This is:",
+        "options": [
+            "A rare clearance warehouse discount",
+            "An online shopping scam that will steal your money and deliver nothing",
+            "A government subsidized device scheme",
+            "Refurbished excess inventory"
+        ],
+        "correct_answer": 1,
+        "explanation": "Unrealistic prices paired with pre-payment only requirements are classic indicators of fraudulent storefronts.",
+        "category": "Shopping Scams"
+    },
+    {
+        "id": "beg-13",
+        "level": "beginner",
+        "question": "What is a strong password practice?",
+        "options": [
+            "Using your birthdate and pet's name so you never forget it",
+            "Using 'Password123' across all your social media accounts",
+            "Using a long, unique passphrase with a mix of characters or using a password manager",
+            "Writing your passwords on a sticky note attached to your monitor"
+        ],
+        "correct_answer": 2,
+        "explanation": "Passphrases with random words or passwords generated and saved in a password manager provide the highest defense against brute-force attacks.",
+        "category": "Password Security"
+    },
+    {
+        "id": "beg-14",
+        "level": "beginner",
+        "question": "A recruiter on Telegram offers ₹5,000 daily for liking YouTube videos. What will happen next?",
+        "options": [
+            "You get hired as a full-time marketing manager",
+            "After a small initial test payout, you will be pressured into paying large sums for 'prepaid investment tasks'",
+            "You receive a formal employment contract in your email",
+            "YouTube will deposit royalties directly into your bank"
+        ],
+        "correct_answer": 1,
+        "explanation": "Task-based part-time job scams lure victims with token earnings before trapping them in high-value investment deposit schemes.",
+        "category": "Job Scams"
+    },
+    {
+        "id": "beg-15",
+        "level": "beginner",
+        "question": "What should you check before scanning a merchant's physical QR code sticker at a retail shop?",
+        "options": [
+            "Whether the QR code is colourful",
+            "Check that the sticker is not pasted over another original QR code, and verify the merchant name displayed before paying",
+            "Nothing, QR codes cannot be tampered with",
+            "Ensure your camera flashlight is turned on"
+        ],
+        "correct_answer": 1,
+        "explanation": "Scammers paste fraudulent QR stickers over authentic merchant stands. Always verify the registered merchant name displayed in your app.",
+        "category": "QR Scams"
+    },
+    {
+        "id": "beg-16",
+        "level": "beginner",
+        "question": "What is 'phishing'?",
+        "options": [
+            "Catching fish using electronic sonar",
+            "Deceptive messages or websites designed to trick users into revealing sensitive data",
+            "Cleaning up dust inside a computer cabinet",
+            "Updating software drivers automatically"
+        ],
+        "correct_answer": 1,
+        "explanation": "Phishing is social engineering where cybercriminals masquerade as legitimate institutions to harvest credentials or financial information.",
+        "category": "Phishing"
+    },
+    {
+        "id": "beg-17",
+        "level": "beginner",
+        "question": "Why should you never use public open Wi-Fi networks (like at cafes or train stations) for banking?",
+        "options": [
+            "The bank website will block your account permanently",
+            "Traffic on unencrypted public Wi-Fi can be intercepted or monitored by attackers on the same network",
+            "Public Wi-Fi is too slow to complete transactions",
+            "Public Wi-Fi resets your banking passwords"
+        ],
+        "correct_answer": 1,
+        "explanation": "Public Wi-Fi networks without password isolation allow adversaries to perform Man-in-the-Middle (MitM) attacks or DNS spoofing.",
+        "category": "Network Security"
+    },
+    {
+        "id": "beg-18",
+        "level": "beginner",
+        "question": "What should you do if an unknown caller shows you an official-looking 'Arrest Warrant' with a national emblem on WhatsApp?",
+        "options": [
+            "Panic and immediately pay the fine demanded",
+            "Recognize it is forged: Indian law enforcement does not issue or serve arrest warrants over WhatsApp",
+            "Delete your WhatsApp account",
+            "Forward the warrant to all your family members"
+        ],
+        "correct_answer": 1,
+        "explanation": "Genuine warrants and court orders are formally executed in person by authorized officers, never served via messaging apps with payment demands.",
+        "category": "Digital Arrest"
+    },
+    {
+        "id": "beg-19",
+        "level": "beginner",
+        "question": "What is 'Ransomware'?",
+        "options": [
+            "A tool that recovers deleted photos",
+            "Malware that encrypts your files and demands payment in exchange for a decryption key",
+            "A browser plugin for comparing online shopping discounts",
+            "An operating system update"
+        ],
+        "correct_answer": 1,
+        "explanation": "Ransomware locks or encrypts files and systems, holding the data hostage until a ransom is paid.",
+        "category": "Malware"
+    },
+    {
+        "id": "beg-20",
+        "level": "beginner",
+        "question": "How can you protect your Aadhaar card from misuse in financial identity theft?",
+        "options": [
+            "Print 10 extra copies to keep in your wallet",
+            "Use 'Masked Aadhaar' where only the last 4 digits are visible and lock your biometrics via the mAadhaar app",
+            "Share your Aadhaar number on your LinkedIn profile",
+            "Do not carry any ID cards outside"
+        ],
+        "correct_answer": 1,
+        "explanation": "Masked Aadhaar hides the first 8 digits, and biometric locking prevents any unauthorized authentication attempts.",
+        "category": "Identity Protection"
+    },
+
+    # INTERMEDIATE (20 Questions)
+    {
+        "id": "int-01",
+        "level": "intermediate",
+        "question": "What is an IDN Homograph attack in phishing URLs?",
+        "options": [
+            "An attack using images instead of text",
+            "An attack where look-alike characters from different alphabets (like Cyrillic 'а' vs Latin 'a') are used to impersonate legitimate domains",
+            "An attack that sends malicious faxes to companies",
+            "An attack targeting home Wi-Fi routers"
+        ],
+        "correct_answer": 1,
+        "explanation": "Internationalized Domain Names (IDN) allow Unicode scripts. Attackers register look-alike characters (punycode) to visually spoof authentic domain names.",
+        "category": "URL Inspection"
+    },
+    {
+        "id": "int-02",
+        "level": "intermediate",
+        "question": "Why is the HTTP response header 'Strict-Transport-Security' (HSTS) crucial for web security?",
+        "options": [
+            "It compresses website images for faster page loading",
+            "It forces browsers to communicate with the website strictly over HTTPS, preventing SSL-stripping MITM attacks",
+            "It prevents SQL injection vulnerabilities in web forms",
+            "It automatically logs users out after 5 minutes"
+        ],
+        "correct_answer": 1,
+        "explanation": "HSTS ensures the browser only makes secure HTTPS connections, eliminating protocol downgrade and SSL-stripping vulnerabilities.",
+        "category": "Security Headers"
+    },
+    {
+        "id": "int-03",
+        "level": "intermediate",
+        "question": "In a PDF document, why is the presence of '/Root/Names/JavaScript' or '/OpenAction' treated as a significant security risk?",
+        "options": [
+            "It causes PDF readers to display advertisements",
+            "It allows automated code execution or scripting upon opening the document without user consent",
+            "It prevents the PDF from being printed",
+            "It increases the document file size by 500%"
+        ],
+        "correct_answer": 1,
+        "explanation": "PDF specifications support JavaScript and OpenActions. Attackers use these triggers to execute exploits or trigger malicious redirects automatically.",
+        "category": "File Security"
+    },
+    {
+        "id": "int-04",
+        "level": "intermediate",
+        "question": "What is CSV Formula Injection (DDE injection)?",
+        "options": [
+            "Injecting computer viruses into database servers",
+            "Starting spreadsheet cell content with characters like '=', '+', '-', or '@' which execute malicious commands when opened in Excel",
+            "Deleting all comma separators in a CSV file",
+            "Encrypting CSV files with a master key"
+        ],
+        "correct_answer": 1,
+        "explanation": "Spreadsheet software treats cells starting with =, +, -, or @ as formulas. Attackers can execute external commands or exfiltrate data via DDE.",
+        "category": "Content Security"
+    },
+    {
+        "id": "int-05",
+        "level": "intermediate",
+        "question": "What is 'SIM Swap' fraud and how do attackers exploit it?",
+        "options": [
+            "Stealing the physical SIM card out of a victim's pocket",
+            "Convincing the telecom provider using forged identity documents to issue a duplicate SIM, intercepting all 2FA SMS codes",
+            "Switching SIM cards between two personal mobile phones",
+            "Downgrading a 5G SIM card to a 2G network"
+        ],
+        "correct_answer": 1,
+        "explanation": "In a SIM swap, criminals trick carriers into transferring the victim's phone number to a rogue SIM, capturing banking OTPs.",
+        "category": "SIM Security"
+    },
+    {
+        "id": "int-06",
+        "level": "intermediate",
+        "question": "What does Content Security Policy (CSP) header protect against?",
+        "options": [
+            "Hard drive crashes",
+            "Cross-Site Scripting (XSS) and unauthorized data injection attacks by restricting which sources can load scripts and media",
+            "Network bandwidth congestion",
+            "Physical theft of servers"
+        ],
+        "correct_answer": 1,
+        "explanation": "CSP specifies approved sources of content that the browser may execute, mitigating XSS and clickjacking attacks.",
+        "category": "Web Security"
+    },
+    {
+        "id": "int-07",
+        "level": "intermediate",
+        "question": "What is Server-Side Request Forgery (SSRF)?",
+        "options": [
+            "A user submitting false credentials on an authentication form",
+            "An attack where the backend server is tricked into making requests to internal or unintended resources like 127.0.0.1 or cloud metadata endpoints",
+            "A server rejecting valid HTTP requests during high traffic",
+            "Overheating of CPU cores inside a data center"
+        ],
+        "correct_answer": 1,
+        "explanation": "SSRF allows attackers to abuse server functionality to access internal network resources or cloud metadata services (e.g. 169.254.169.254).",
+        "category": "Application Security"
+    },
+    {
+        "id": "int-08",
+        "level": "intermediate",
+        "question": "Why is JavaScript 'eval()' considered dangerous in web applications?",
+        "options": [
+            "It is deprecated in all modern web browsers",
+            "It evaluates arbitrary strings as executable code, creating severe Remote Code Execution (RCE) or XSS risks if untrusted input is passed",
+            "It slows down mathematical calculations by 10x",
+            "It makes the page background colour turn red"
+        ],
+        "correct_answer": 1,
+        "explanation": "eval() executes code from strings, allowing arbitrary attacker payloads to execute in the victim's browser context.",
+        "category": "JavaScript Inspection"
+    },
+    {
+        "id": "int-09",
+        "level": "intermediate",
+        "question": "In a Word document (.docm), what is a clear sign of social engineering in malicious delivery?",
+        "options": [
+            "The document uses 12pt Times New Roman font",
+            "The document displays a banner instructing the user to 'Enable Macros' or 'Enable Content' to view 'protected' or 'secure' contents",
+            "The document has a table of contents with 5 chapters",
+            "The document contains page numbers in the footer"
+        ],
+        "correct_answer": 1,
+        "explanation": "Malicious macro documents frequently instruct users to click 'Enable Content' to bypass Microsoft Office sandbox protections.",
+        "category": "Malware Analysis"
+    },
+    {
+        "id": "int-10",
+        "level": "intermediate",
+        "question": "What is a 'Zip Slip' vulnerability in archive file handling?",
+        "options": [
+            "A damaged zip file that refuses to unzip",
+            "An archive containing relative directory paths like '../../evil.sh' that extract outside the designated folder to overwrite system files",
+            "A zip file with a password of fewer than 4 characters",
+            "A zip file containing only audio recordings"
+        ],
+        "correct_answer": 1,
+        "explanation": "Zip Slip is an arbitrary file overwrite vulnerability that exploits directory traversal characters within archive filenames.",
+        "category": "File Security"
+    },
+    {
+        "id": "int-11",
+        "level": "intermediate",
+        "question": "What is 'Quishing' in modern cyber threat intelligence?",
+        "options": [
+            "Fish farming using artificial intelligence",
+            "QR-code phishing where malicious URLs or payment triggers are embedded in QR codes to evade email text scanners",
+            "Audio phishing over satellite phones",
+            "A method to accelerate blockchain transactions"
+        ],
+        "correct_answer": 1,
+        "explanation": "Quishing replaces plain URL links with QR codes so traditional email text filters cannot detect the phishing destination.",
+        "category": "Threat Intelligence"
+    },
+    {
+        "id": "int-12",
+        "level": "intermediate",
+        "question": "What security attribute should always be set on session cookies to prevent interception over non-secure connections?",
+        "options": [
+            "ReadOnly",
+            "Secure",
+            "Cache-Control",
+            "Keep-Alive"
+        ],
+        "correct_answer": 1,
+        "explanation": "The 'Secure' cookie attribute instructs browsers to send the cookie only over encrypted (HTTPS) connections.",
+        "category": "Cookie Security"
+    },
+    {
+        "id": "int-13",
+        "level": "intermediate",
+        "question": "What does the 'HttpOnly' flag on a browser cookie accomplish?",
+        "options": [
+            "Allows the cookie to be accessed only via JavaScript document.cookie",
+            "Prevents client-side scripts from reading the cookie, mitigating session hijacking via XSS",
+            "Restricts the cookie to HTTP port 80 only",
+            "Deletes the cookie after 60 seconds"
+        ],
+        "correct_answer": 1,
+        "explanation": "HttpOnly blocks JavaScript from accessing document.cookie, making it harder for XSS attacks to steal session tokens.",
+        "category": "Cookie Security"
+    },
+    {
+        "id": "int-14",
+        "level": "intermediate",
+        "question": "What is Typosquatting in threat actor infrastructure?",
+        "options": [
+            "Failing a typing speed test",
+            "Registering domain names that look nearly identical to popular brands with common misspellings (e.g. gooogle.com, netflx.com) to catch accidental traffic",
+            "Typing passwords backwards",
+            "Using incorrect punctuation in HTML code"
+        ],
+        "correct_answer": 1,
+        "explanation": "Typosquatting targets users who make typographical errors when entering web addresses in browser address bars.",
+        "category": "Domain Intelligence"
+    },
+    {
+        "id": "int-15",
+        "level": "intermediate",
+        "question": "Why do cybercriminals frequently use URL shortening services (bit.ly, tinyurl) in phishing campaigns?",
+        "options": [
+            "Shortened URLs load 50% faster on mobile networks",
+            "To conceal the true destination domain, IP address, and query parameters from victims and security scanners",
+            "Because internet service providers give discounts for short URLs",
+            "To bypass SSL certificate renewal requirements"
+        ],
+        "correct_answer": 1,
+        "explanation": "URL shorteners obscure the real malicious domain name, preventing visual inspection by victims before clicking.",
+        "category": "Phishing Analysis"
+    },
+    {
+        "id": "int-16",
+        "level": "intermediate",
+        "question": "What is the primary indicator of a 'Decompression Bomb' (Zip Bomb)?",
+        "options": [
+            "The archive requires a 64-character password",
+            "An extremely high compression ratio where a tiny archive file (e.g. 5 MB) expands into hundreds of gigabytes, exhausting server memory/disk",
+            "The archive contains video files",
+            "The archive was created on Linux"
+        ],
+        "correct_answer": 1,
+        "explanation": "Zip bombs exploit recursive or nested compression to consume enormous storage or memory during extraction, causing denial of service.",
+        "category": "Archive Analysis"
+    },
+    {
+        "id": "int-17",
+        "level": "intermediate",
+        "question": "What is 'Pig Butchering' (Sha Zhu Pan) in online financial scams?",
+        "options": [
+            "Hacking livestock monitoring systems on agricultural farms",
+            "A long-term fraud scheme combining romance grooming with fraudulent cryptocurrency or forex investment platforms before taking all funds",
+            "An aggressive email spam technique sent in bulk",
+            "A brute-force dictionary attack on SSH servers"
+        ],
+        "correct_answer": 1,
+        "explanation": "Pig butchering builds emotional trust over weeks or months before encouraging the victim to invest on manipulated investment platforms.",
+        "category": "Financial Scams"
+    },
+    {
+        "id": "int-18",
+        "level": "intermediate",
+        "question": "How does Business Email Compromise (BEC) differ from ordinary generic phishing?",
+        "options": [
+            "BEC exclusively targets residential home users",
+            "BEC involves highly targeted, researched impersonation of corporate executives or suppliers to orchestrate fraudulent wire transfers",
+            "BEC only uses automated spam bots",
+            "BEC does not involve email at all"
+        ],
+        "correct_answer": 1,
+        "explanation": "BEC relies on targeted reconnaissance, compromised executive accounts, and spoofed vendor invoices rather than generic mass emails.",
+        "category": "Enterprise Security"
+    },
+    {
+        "id": "int-19",
+        "level": "intermediate",
+        "question": "What does an unexpected hidden iframe with 'opacity: 0' and 'position: absolute' typically indicate on a compromised webpage?",
+        "options": [
+            "A normal responsive design component",
+            "A clickjacking overlay or silent credential harvester capturing keystrokes and clicks without user awareness",
+            "An optimized video streaming player",
+            "A database backup script"
+        ],
+        "correct_answer": 1,
+        "explanation": "Invisible or zero-opacity iframes are standard techniques for UI redressing, clickjacking, and covert cross-site tracking.",
+        "category": "HTML Analysis"
+    },
+    {
+        "id": "int-20",
+        "level": "intermediate",
+        "question": "Why is the Golden Hour (first 1–2 hours) critical after falling victim to financial cyber fraud?",
+        "options": [
+            "Bank interest rates decrease after 2 hours",
+            "Prompt reporting to 1930 allows the Indian Cyber Crime Coordination Centre (I4C) to freeze funds in the scammer's beneficiary bank accounts before withdrawal",
+            "Computers automatically format their hard drives after 2 hours",
+            "Police stations only accept FIRs before noon"
+        ],
+        "correct_answer": 1,
+        "explanation": "Reporting within the Golden Hour enables authorities to place immediate holds on intermediary mule accounts before funds are withdrawn at ATMs.",
+        "category": "Incident Response"
+    },
+
+    # ADVANCED (20 Questions)
+    {
+        "id": "adv-01",
+        "level": "advanced",
+        "question": "In static JavaScript analysis, what does the combination of 'String.fromCharCode', hex arrays, and recursive function execution suggest?",
+        "options": [
+            "Advanced TypeScript compiler optimization",
+            "Polymorphic JavaScript obfuscation designed to hide malicious payload strings and bypass signature-based static code scanners",
+            "Standard React Virtual DOM diffing mechanism",
+            "Google Analytics tracking code"
+        ],
+        "correct_answer": 1,
+        "explanation": "Heavy use of character code reconstruction, hex encoding, and self-decoding functions is typical of packers and obfuscated exploit delivery code.",
+        "category": "Malware Reverse Engineering"
+    },
+    {
+        "id": "adv-02",
+        "level": "advanced",
+        "question": "What is DNS Rebinding and how does it compromise sandbox security?",
+        "options": [
+            "Registering a new domain name through a secondary registrar",
+            "An attack where a malicious domain's DNS response initially resolves to a public IP, then quickly changes TTL to point to internal IP (127.0.0.1) to bypass same-origin policy",
+            "Renewing an expired domain before others can claim it",
+            "Changing DNS nameservers to Cloudflare"
+        ],
+        "correct_answer": 1,
+        "explanation": "DNS rebinding circumvents the browser Same-Origin Policy by dynamically shifting DNS answers to private network addresses after initial verification.",
+        "category": "Network Security"
+    },
+    {
+        "id": "adv-03",
+        "level": "advanced",
+        "question": "When building an automated website sandbox inspector using Playwright or Chromium, which flag is essential to prevent sandbox escape when scanning untrusted pages?",
+        "options": [
+            "--no-sandbox should NEVER be used in production without isolated container boundaries (e.g. gVisor or microVMs)",
+            "--disable-web-security is required to inspect all scripts",
+            "--allow-file-access-from-files should be enabled for all runs",
+            "--ignore-certificate-errors without domain restrictions"
+        ],
+        "correct_answer": 0,
+        "explanation": "Disabling the Chromium sandbox (--no-sandbox) allows untrusted website exploit payloads to execute directly on the host operating system.",
+        "category": "Sandbox Architecture"
+    },
+    {
+        "id": "adv-04",
+        "level": "advanced",
+        "question": "What is the security implication of a website's Referrer-Policy being set to 'unsafe-url'?",
+        "options": [
+            "The browser fails to cache web pages",
+            "The full URL (including query parameters containing reset tokens, API keys, or private user IDs) is leaked to third-party domains in HTTP Referer headers",
+            "The server rejects incoming traffic from search engines",
+            "The website cannot use cookies"
+        ],
+        "correct_answer": 1,
+        "explanation": "'unsafe-url' sends the complete URL path and query parameters to any destination, exposing sensitive tokens to external servers.",
+        "category": "HTTP Security"
+    },
+    {
+        "id": "adv-05",
+        "level": "advanced",
+        "question": "In a web application security assessment, what does the presence of 'navigator.clipboard.readText()' in a third-party script signify?",
+        "options": [
+            "Standard web browser accessibility support",
+            "Potential clipboard hijacking or credential scraping, where the script monitors the user's clipboard for copied cryptocurrency addresses or passwords",
+            "Optimized copy-paste performance for online forms",
+            "Browser history synchronization"
+        ],
+        "correct_answer": 1,
+        "explanation": "Unsolicited clipboard reading can harvest sensitive data like copied passwords, seeds, and financial accounts.",
+        "category": "Client-Side Security"
+    },
+    {
+        "id": "adv-06",
+        "level": "advanced",
+        "question": "How does Subresource Integrity (SRI) protect websites using third-party CDNs for scripts?",
+        "options": [
+            "It encrypts the script contents before transmitting them",
+            "It validates a cryptographic hash (e.g. sha384) of the fetched script, preventing compromised CDNs from serving tampered malicious code",
+            "It automatically bundles multiple script files into one",
+            "It guarantees 99.999% uptime for script hosting"
+        ],
+        "correct_answer": 1,
+        "explanation": "SRI ensures that resources hosted on third-party servers match a pre-computed hash, preventing supply-chain script tampering.",
+        "category": "Supply Chain Security"
+    },
+    {
+        "id": "adv-07",
+        "level": "advanced",
+        "question": "In advanced malware dropper documents, what is 'VBA Stomping'?",
+        "options": [
+            "Deleting all Microsoft Office macros completely",
+            "Removing the readable VBA source code while leaving compiled P-code intact, evading static antivirus scanners that only inspect source text",
+            "Converting VBA macros into Python scripts",
+            "Compressing macro code with ZIP algorithm"
+        ],
+        "correct_answer": 1,
+        "explanation": "VBA Stomping overwrites source code with dummy text while the Office document executes the pre-compiled P-code bytecode directly.",
+        "category": "Malware Analysis"
+    },
+    {
+        "id": "adv-08",
+        "level": "advanced",
+        "question": "What is the primary mechanism of a 'Magecart' attack?",
+        "options": [
+            "DDoS attacks on shopping cart checkout servers",
+            "Injecting malicious digital skimming JavaScript into checkout payment pages to intercept credit card details in real time as users type",
+            "Shipping counterfeit products to physical addresses",
+            "Stealing delivery trucks"
+        ],
+        "correct_answer": 1,
+        "explanation": "Magecart attacks inject client-side script skimmers into e-commerce checkout flows, harvesting card data before encryption at the gateway.",
+        "category": "Threat Intelligence"
+    },
+    {
+        "id": "adv-09",
+        "level": "advanced",
+        "question": "What is the purpose of the 'X-Content-Type-Options: nosniff' header?",
+        "options": [
+            "Prevents search engines from indexing the webpage",
+            "Instructs the browser to strictly honor the declared Content-Type header and not perform MIME-type sniffing, preventing executable file upload exploits",
+            "Speeds up PDF document rendering in Chrome",
+            "Enforces dark mode color palettes"
+        ],
+        "correct_answer": 1,
+        "explanation": "'nosniff' prevents browsers from treating non-executable MIME types (like text/plain) as executable scripts (text/javascript).",
+        "category": "Security Headers"
+    },
+    {
+        "id": "adv-10",
+        "level": "advanced",
+        "question": "In cyber threat intelligence attribution, what does the MITRE ATT&CK framework provide?",
+        "options": [
+            "A commercial antivirus software licence",
+            "A standardized matrix of documented adversary tactics, techniques, and procedures (TTPs) based on real-world observations",
+            "A hardware firewall appliance",
+            "A programming language for writing exploits"
+        ],
+        "correct_answer": 1,
+        "explanation": "MITRE ATT&CK catalogs threat actor behaviors and techniques across various phases of cyber attack lifecycles.",
+        "category": "Threat Frameworks"
+    },
+    {
+        "id": "adv-11",
+        "level": "advanced",
+        "question": "How do adversaries exploit 'Open Redirect' vulnerabilities in phishing campaigns?",
+        "options": [
+            "By shutting down the victim's router",
+            "By leveraging legitimate, trusted domain URLs (e.g. https://trustedbank.com/redirect?url=https://evil-site.com) to bypass email spam filters and deceive users",
+            "By modifying DNS root servers directly",
+            "By forcing open network ports on firewalls"
+        ],
+        "correct_answer": 1,
+        "explanation": "Open redirects allow attackers to use trusted brand URLs in links, which then forward victims seamlessly to a phishing destination.",
+        "category": "Phishing Analysis"
+    },
+    {
+        "id": "adv-12",
+        "level": "advanced",
+        "question": "What is 'C2' (Command and Control) in advanced persistent threat (APT) infrastructure?",
+        "options": [
+            "A computer processor instruction set",
+            "Centralized servers controlled by attackers used to send commands and receive exfiltrated data from compromised victim systems",
+            "A high-security database classification level",
+            "A cable standard for connecting servers"
+        ],
+        "correct_answer": 1,
+        "explanation": "C2 infrastructure maintains communication with malware implants deployed on victim networks.",
+        "category": "Threat Infrastructure"
+    },
+    {
+        "id": "adv-13",
+        "level": "advanced",
+        "question": "What makes 'Living off the Land' (LotL) attacks difficult to detect?",
+        "options": [
+            "They exclusively operate during night hours",
+            "Attackers abuse legitimate native administrative tools already present on the OS (PowerShell, certutil, WMI, bitsadmin) rather than dropping custom malware binaries",
+            "They disconnect computers from the internet",
+            "They rely on physical break-ins to offices"
+        ],
+        "correct_answer": 1,
+        "explanation": "LotL binaries (LOLBins) avoid signature-based antivirus detection because they utilize trusted, digitally signed operating system utilities.",
+        "category": "Detection Evasion"
+    },
+    {
+        "id": "adv-14",
+        "level": "advanced",
+        "question": "What is the purpose of 'Certificate Transparency' (CT) logs in TLS ecosystem security?",
+        "options": [
+            "To make TLS handshake speeds faster",
+            "An append-only public ledger of all issued SSL/TLS certificates, allowing domain owners to detect unauthorized or rogue certificates issued for their domain",
+            "To display website security badges in browser search bars",
+            "To encrypt server private keys"
+        ],
+        "correct_answer": 1,
+        "explanation": "CT logs provide public visibility into certificate issuance, exposing mis-issued certificates and rogue Certificate Authority compromises.",
+        "category": "PKI & Certificates"
+    },
+    {
+        "id": "adv-15",
+        "level": "advanced",
+        "question": "What is 'Punycode' and how does it relate to homograph phishing attacks?",
+        "options": [
+            "A lightweight compression algorithm for mobile applications",
+            "An ASCII-compatible encoding (prefixed with 'xn--') representing Unicode characters in domain names, allowing spoofed lookalike Cyrillic or Greek domains",
+            "A programming language for IoT microcontrollers",
+            "A cipher used in World War II"
+        ],
+        "correct_answer": 1,
+        "explanation": "Punycode translates non-ASCII Unicode strings into ASCII characters (e.g. xn--pple-43d.com), enabling visually indistinguishable international domain spoofs.",
+        "category": "Domain Intelligence"
+    },
+    {
+        "id": "adv-16",
+        "level": "advanced",
+        "question": "What is the significance of the 'Permissions-Policy' header in modern web security?",
+        "options": [
+            "It configures user login roles in databases",
+            "It restricts which browser APIs (geolocation, microphone, camera, payment, usb) can be accessed by the current page and third-party embedded iframes",
+            "It grants administrative access to Linux terminals",
+            "It sets file read/write permissions on the web server"
+        ],
+        "correct_answer": 1,
+        "explanation": "Permissions-Policy allows site owners to selectively disable sensitive hardware APIs and features across top-level and embedded browsing contexts.",
+        "category": "Web Security"
+    },
+    {
+        "id": "adv-17",
+        "level": "advanced",
+        "question": "What is an effective defensive mitigation against automated credential stuffing attacks?",
+        "options": [
+            "Changing the font on the login form",
+            "Enforcing rate limiting, device fingerprinting, CAPTCHAs, credential leak monitoring (HaveIBeenPwned), and mandatory multi-factor authentication",
+            "Hiding the login button behind a CSS animation",
+            "Allowing unlimited password attempts per hour"
+        ],
+        "correct_answer": 1,
+        "explanation": "Credential stuffing tests millions of leaked username/password combos. Multi-factor auth, adaptive rate limiting, and bot challenges defeat automated attempts.",
+        "category": "Authentication Security"
+    },
+    {
+        "id": "adv-18",
+        "level": "advanced",
+        "question": "In email threat analysis, what does an SPF 'SoftFail' (~all) vs 'Fail' (-all) policy mean?",
+        "options": [
+            "SoftFail discards the email immediately, while Fail delivers it to inbox",
+            "Fail (-all) instructs receiving mail servers to reject unauthorized sending IPs, while SoftFail (~all) suggests accepting the email but marking it as suspicious/spam",
+            "Both policies behave identically in all email clients",
+            "SoftFail is used only for internal company emails"
+        ],
+        "correct_answer": 1,
+        "explanation": "'-all' is a strict rejection policy for unauthorized sending mail transfer agents; '~all' accepts with suspicion.",
+        "category": "Email Security"
+    },
+    {
+        "id": "adv-19",
+        "level": "advanced",
+        "question": "How does DMARC build on SPF and DKIM authentication?",
+        "options": [
+            "It replaces the need for SSL certificates",
+            "It requires domain alignment between the 'From' header and SPF/DKIM domains, specifying how receivers should handle failures (none, quarantine, reject) and providing reporting",
+            "It acts as an antivirus scanner for email attachments",
+            "It limits the maximum file size of email attachments"
+        ],
+        "correct_answer": 1,
+        "explanation": "DMARC verifies that the visible 'From' domain matches authenticated DKIM/SPF identities and enforces domain owner policies across the internet.",
+        "category": "Email Security"
+    },
+    {
+        "id": "adv-20",
+        "level": "advanced",
+        "question": "In threat intelligence scoring, what is 'Confidence Score' and why must it be decoupled from 'Risk Score'?",
+        "options": [
+            "They are the exact same metric and should always have equal values",
+            "Risk Score reflects the severity/danger of observed findings, while Confidence reflects the certainty, completeness, and reliability of the evidence collected",
+            "Confidence is only used for marketing brochures",
+            "Risk Score applies to hardware while Confidence applies to software"
+        ],
+        "correct_answer": 1,
+        "explanation": "A high-risk item might have low confidence if based on single heuristic indicator; separating them prevents misleading users on analytical certainty.",
+        "category": "Risk Engine Architecture"
+    }
+]
+
+out_dir = r"C:\Users\Shreeskanda\.gemini\antigravity\scratch\cyber-sentinel\backend\app\data"
+os.makedirs(out_dir, exist_ok=True)
+out_path = os.path.join(out_dir, "quiz_questions.json")
+
+with open(out_path, "w", encoding="utf-8") as f:
+    json.dump(questions, f, indent=2, ensure_ascii=False)
+
+print(f"Successfully wrote {len(questions)} quiz questions to {out_path}")

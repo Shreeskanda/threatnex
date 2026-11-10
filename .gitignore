@@ -1,0 +1,66 @@
+# ============================================================
+#  THREATNEX — .gitignore
+# ============================================================
+
+# --- Python / Backend ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.log
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Environment secrets — NEVER commit real keys
+backend/.env
+.env
+
+# Database files — runtime data, not source
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads — user-submitted files, never commit
+backend/uploads/
+uploads/
+
+# --- Node / Frontend ---
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+
+# Build artifacts
+dist/
+*.tsbuildinfo
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Vercel ---
+.vercel/
+
+# --- Misc ---
+*.bak
+*.tmp
