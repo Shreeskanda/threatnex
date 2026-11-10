@@ -18,8 +18,8 @@
 </p>
 
 <p align="center">
-  <a href="https://frontend-theta-three-57.vercel.app" target="_blank">
-    <strong>?? Live Web App: https://frontend-theta-three-57.vercel.app</strong>
+  <a href="https://threatnex.vercel.app" target="_blank">
+    <strong>?? Live Web App: https://threatnex.vercel.app</strong>
   </a>
 </p>
 
