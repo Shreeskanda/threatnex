@@ -1,16 +1,23 @@
-MIT License
+THREATNEX Software License
 
-Copyright (c) 2026 Shreeskanda
+Copyright (c) 2026 Shreeskanda. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+of this software and associated documentation files (the "Software"), to use,
+run, and inspect the Software for personal, non-commercial, and evaluation purposes,
+subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. NO MODIFICATION: The Software may not be modified, altered, decompiled, translated,
+   or used to create derivative works without prior express written permission from
+   the copyright holder.
+
+2. NO RE-PUBLICATION OR DISTRIBUTION: The Software, whether in original, compiled, or
+   modified form, may not be published, republished, redistributed, sublicensed, sold,
+   mirrored, or hosted on any public or private platform, repository, or distribution
+   service without prior express written consent from the copyright holder.
+
+3. ATTRIBUTION: The above copyright notice and this permission notice shall be included
+   in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,

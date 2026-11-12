@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
   <img src="https://img.shields.io/badge/Render-Backend-46E3B7?style=for-the-badge&logo=render&logoColor=black" alt="Render" />
   <img src="https://img.shields.io/badge/Tests-28%20Passed-22c55e?style=for-the-badge&logo=pytest&logoColor=white" alt="Tests" />
-  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License" />
+  <img src="https://img.shields.io/badge/License-Custom%20(No%20Derivatives)-red?style=for-the-badge" alt="Custom License" />
 </p>
 
 <p align="center">
@@ -126,4 +126,4 @@ graph TD
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This software is licensed under a **Custom Source-Available License** — see the [LICENSE](LICENSE) file for details. Unauthorized modification, derivative works, redistribution, and republication are strictly prohibited without prior written consent from the copyright holder.
