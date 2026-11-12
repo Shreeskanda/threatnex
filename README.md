@@ -19,8 +19,22 @@
 
 <p align="center">
   <a href="https://threatnex.vercel.app" target="_blank">
-    <strong>?? Live Web App: https://threatnex.vercel.app</strong>
+    <strong>🌐 Live Web App: https://threatnex.vercel.app</strong>
   </a>
+</p>
+
+---
+
+## 🖥️ Platform Preview
+
+<p align="center">
+  <b>Enterprise Security Intelligence Dashboard</b><br/>
+  <img src="docs/screenshots/dashboard.png" width="95%" alt="THREATNEX Security Intelligence Dashboard" />
+</p>
+
+<p align="center">
+  <b>Universal Multi-Modal Threat Scan Centre</b><br/>
+  <img src="docs/screenshots/scan-centre.png" width="95%" alt="Universal Multi-Modal Scan Centre" />
 </p>
 
 ---
