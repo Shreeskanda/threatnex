@@ -100,19 +100,27 @@ export default function ScanHistory() {
         {/* Filter bar */}
         <div className="mt-5 grid grid-cols-1 sm:grid-cols-12 gap-3 pt-4 border-t border-gray-100">
           <form onSubmit={handleSearchSubmit} className="sm:col-span-6 relative">
+            <label htmlFor="scan-history-search" className="sr-only">Search scan history</label>
             <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-gray-400" />
             <input
+              id="scan-history-search"
+              name="search"
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by URL, file name, or keyword..."
+              aria-label="Search by URL, file name, or keyword"
               className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white"
             />
           </form>
 
           <div className="sm:col-span-3">
+            <label htmlFor="filter-threat-level" className="sr-only">Filter by Threat Level</label>
             <select
+              id="filter-threat-level"
+              name="threatLevel"
               value={threatLevel}
+              aria-label="Filter scan records by threat level"
               onChange={(e) => {
                 setThreatLevel(e.target.value);
                 setPage(1);
@@ -129,8 +137,12 @@ export default function ScanHistory() {
           </div>
 
           <div className="sm:col-span-3">
+            <label htmlFor="filter-scan-type" className="sr-only">Filter by Scan Type</label>
             <select
+              id="filter-scan-type"
+              name="scanType"
               value={scanType}
+              aria-label="Filter scan records by scan type"
               onChange={(e) => {
                 setScanType(e.target.value);
                 setPage(1);

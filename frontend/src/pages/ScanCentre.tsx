@@ -41,16 +41,24 @@ function UrlTab({ onResult }: { onResult: (r: ScanResult) => void }) {
   return (
     <form onSubmit={handleScan} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Website URL to scan</label>
+        <label htmlFor="scan-centre-url-input" className="block text-sm font-medium text-gray-700 mb-1.5">Website URL to scan</label>
         <div className="flex gap-3">
           <input
+            id="scan-centre-url-input"
+            name="scanUrl"
             type="url"
             value={url}
             onChange={e => setUrl(e.target.value)}
             placeholder="https://example.com"
+            aria-label="Website URL to scan"
             className="flex-1 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button type="submit" disabled={!url.trim()} className="btn-primary flex items-center gap-2 whitespace-nowrap">
+          <button
+            type="submit"
+            disabled={!url.trim()}
+            aria-label="Submit URL for security inspection"
+            className="btn-primary flex items-center gap-2 whitespace-nowrap"
+          >
             <Globe className="w-4 h-4" />
             Scan URL
           </button>
@@ -125,7 +133,11 @@ function FileTab({ onResult }: { onResult: (r: ScanResult) => void }) {
               <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
               <span className="text-sm font-medium text-gray-700 flex-1 min-w-0 truncate">{f.name}</span>
               <span className="text-xs text-gray-500">{(f.size / 1024).toFixed(1)} KB</span>
-              <button onClick={() => setFiles([])} className="text-gray-400 hover:text-red-600">
+              <button
+                onClick={() => setFiles([])}
+                aria-label="Remove selected file"
+                className="text-gray-400 hover:text-red-600"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -195,6 +207,7 @@ function ImageTab({ onResult }: { onResult: (r: ScanResult) => void }) {
             <img src={preview} alt="Preview" className="w-full max-h-48 object-contain rounded-lg border border-gray-200 bg-gray-50" />
             <button
               onClick={() => { setFile(null); setPreview(''); }}
+              aria-label="Remove uploaded image"
               className="absolute top-2 right-2 bg-white rounded-full p-1 shadow text-gray-500 hover:text-red-600"
             >
               <X className="w-4 h-4" />
@@ -234,17 +247,25 @@ function TextTab({ onResult }: { onResult: (r: ScanResult) => void }) {
   return (
     <form onSubmit={handleScan} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">Text to analyze</label>
+        <label htmlFor="scan-centre-text-input" className="block text-sm font-medium text-gray-700 mb-1.5">Text to analyze</label>
         <textarea
+          id="scan-centre-text-input"
+          name="scanText"
           value={text}
           onChange={e => setText(e.target.value)}
           placeholder="Paste suspicious text, email content, SMS message, or any text to analyze..."
+          aria-label="Text message, email or communication to analyze for threats"
           rows={8}
           className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono"
         />
         <div className="text-xs text-gray-400 mt-1 text-right">{text.length} characters</div>
       </div>
-      <button type="submit" disabled={!text.trim()} className="btn-primary flex items-center gap-2">
+      <button
+        type="submit"
+        disabled={!text.trim()}
+        aria-label="Analyze text for cyber threats"
+        className="btn-primary flex items-center gap-2"
+      >
         <AlignLeft className="w-4 h-4" />
         Analyze Text
       </button>

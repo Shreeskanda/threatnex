@@ -1,0 +1,17 @@
+{
+  "short_name": "THREATNEX",
+  "name": "THREATNEX - AI Cyber Threat Intelligence",
+  "icons": [
+    {
+      "src": "/threatnex-logo.jpg",
+      "type": "image/jpeg",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
+  "display": "standalone",
+  "description": "AI-Powered Multimodal Cyber Threat Intelligence & Digital Safety Platform"
+}

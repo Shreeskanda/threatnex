@@ -76,7 +76,11 @@ export default function Layout({ children }: LayoutProps) {
             <div className="text-sm font-bold text-gray-900 leading-tight tracking-wide">THREATNEX</div>
             <div className="text-xs text-gray-500">Cyber Threat Intelligence</div>
           </div>
-          <button className="ml-auto lg:hidden text-gray-500" onClick={() => setSidebarOpen(false)}>
+          <button
+            className="ml-auto lg:hidden text-gray-500 hover:text-gray-700"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close navigation sidebar"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -116,6 +120,8 @@ export default function Layout({ children }: LayoutProps) {
           <button
             className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100 text-gray-600"
             onClick={() => setSidebarOpen(true)}
+            aria-label="Open navigation sidebar"
+            aria-expanded={sidebarOpen}
           >
             <Menu className="w-5 h-5" />
           </button>

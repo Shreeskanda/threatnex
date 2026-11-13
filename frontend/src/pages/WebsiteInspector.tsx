@@ -58,12 +58,16 @@ export default function WebsiteInspector() {
         {/* Input Form */}
         <form onSubmit={handleInspect} className="mt-5 flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
+            <label htmlFor="website-inspector-url" className="sr-only">Enter full website URL to inspect</label>
             <Globe className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" />
             <input
+              id="website-inspector-url"
+              name="url"
               type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="Enter full website URL (e.g. https://example.com)"
+              aria-label="Enter full website URL to inspect"
               className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
               disabled={loading}
             />
@@ -71,6 +75,7 @@ export default function WebsiteInspector() {
           <button
             type="submit"
             disabled={loading}
+            aria-label="Start website security inspection"
             className="btn-primary flex items-center justify-center gap-2 px-6 py-2.5"
           >
             <span>{loading ? 'Inspecting...' : 'Inspect Website'}</span>

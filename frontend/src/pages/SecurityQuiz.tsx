@@ -87,11 +87,12 @@ export default function SecurityQuiz() {
           </div>
 
           {/* Difficulty Level Buttons */}
-          <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl self-start sm:self-auto">
+          <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl self-start sm:self-auto" role="group" aria-label="Select Quiz Difficulty">
             {(['beginner', 'intermediate', 'advanced'] as const).map((lvl) => (
               <button
                 key={lvl}
                 onClick={() => startQuiz(lvl)}
+                aria-label={`Start ${lvl} difficulty quiz`}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-all ${
                   level === lvl
                     ? 'bg-blue-700 text-white shadow-sm'

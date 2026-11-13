@@ -99,12 +99,16 @@ export default function CyberAwareness() {
       {/* Filter and Search Bar */}
       <div className="card flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
         <div className="relative w-full sm:w-96">
+          <label htmlFor="awareness-search-input" className="sr-only">Search among 24 scam guides</label>
           <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-gray-400" />
           <input
+            id="awareness-search-input"
+            name="search"
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search among 24 scam guides..."
+            aria-label="Search among 24 scam guides"
             className="w-full pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white"
           />
         </div>
@@ -115,6 +119,7 @@ export default function CyberAwareness() {
             <button
               key={sev}
               onClick={() => setSeverityFilter(sev)}
+              aria-label={`Filter cyber threats by ${sev} severity`}
               className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
                 severityFilter === sev
                   ? 'bg-blue-700 text-white'

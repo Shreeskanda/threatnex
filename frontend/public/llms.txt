@@ -1,0 +1,30 @@
+# THREATNEX
+
+> AI-Powered Multimodal Cyber Threat Intelligence & Digital Safety Platform
+
+THREATNEX is an enterprise-grade cyber threat intelligence platform engineered to detect digital threats across URLs, websites, documents, images, QR codes, and text communications, paired with an interactive citizen safety and cyber awareness center.
+
+## Core Capabilities & Endpoints
+
+- [Dashboard](https://threatnex.vercel.app/): Real-time threat detection analytics, safe/suspicious/critical distributions, and quick scan interface.
+- [Scan Centre](https://threatnex.vercel.app/scan): Unified multimodal scanning interface accepting URLs, files (PDF, DOCX, PPTX, CSV, TXT, ZIP), images with QR decoding, and raw text.
+- [Website Inspector](https://threatnex.vercel.app/website-inspector): DOM structure inspection, hidden forms, password collection detection, and JavaScript static analysis.
+- [File Scanner](https://threatnex.vercel.app/file-scanner): Deep static analysis for macro exploits, PDF URI attacks, and zip-slip directory traversal vulnerabilities.
+- [Image Scanner](https://threatnex.vercel.app/image-scanner): Computer vision QR code quishing decoding and OCR text extraction.
+- [Threat Intelligence](https://threatnex.vercel.app/threat-intelligence): Domain reputation, IP intelligence, and commercial threat intelligence status.
+- [Cyber Awareness Knowledge Base](https://threatnex.vercel.app/awareness): 24 comprehensive scam anatomy guides, red flags, prevention tips, and emergency recovery checklists.
+- [Digital Arrest Awareness](https://threatnex.vercel.app/digital-arrest): Interactive educational scenario exposing fake law enforcement video-call extortion schemes.
+- [Security Quiz](https://threatnex.vercel.app/quiz): 60-question interactive cyber readiness evaluation across Beginner, Intermediate, and Advanced tiers.
+
+## Technical Architecture
+
+- Frontend: React 19, TypeScript, Tailwind CSS, Vite, Recharts
+- Backend: Python 3.12, FastAPI, SQLAlchemy, Pydantic
+- Detection Engines: Static heuristic rules, AST JavaScript analysis, DOM inspection, OCR, QR matrix decoding
+- Security Guardrails: SSRF containment, zero-execution sandbox, Zip-bomb explosion prevention
+
+## Repository & Open Source
+
+- GitHub: https://github.com/Shreeskanda/threatnex
+- Author: Shreeskanda
+- License: Custom Source-Available License

@@ -118,15 +118,24 @@ export default function Dashboard() {
           Quick URL Scan
         </h2>
         <form onSubmit={handleQuickScan} className="flex gap-3">
+          <label htmlFor="quick-url-input" className="sr-only">Website URL to scan</label>
           <input
+            id="quick-url-input"
+            name="quickUrl"
             type="url"
             value={quickUrl}
             onChange={e => setQuickUrl(e.target.value)}
             placeholder="https://example.com"
+            aria-label="Website URL to scan"
             className="flex-1 border border-blue-200 bg-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             disabled={scanning}
           />
-          <button type="submit" disabled={scanning || !quickUrl.trim()} className="btn-primary flex items-center gap-2 whitespace-nowrap">
+          <button
+            type="submit"
+            disabled={scanning || !quickUrl.trim()}
+            aria-label="Start quick threat scan"
+            className="btn-primary flex items-center gap-2 whitespace-nowrap"
+          >
             {scanning ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
             {scanning ? 'Scanning...' : 'Scan'}
           </button>
